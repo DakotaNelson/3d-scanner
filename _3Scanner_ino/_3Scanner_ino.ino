@@ -33,6 +33,7 @@ void scan(resolution){
     }
     analogWrite(tiltMotor, column)//scans up one postion
     column++;
+    //scans direction 2
     for(int d2 = 128; d2>64; d1--){
       analogWrite(panMotor, d2);
       analogRead(sensor);
