@@ -5,6 +5,7 @@ import arduino as a
 import serial
 import sys
 import time
+import numpy as np 
 
 
 def capture_data(resolution, arduino = serial.Serial("/dev/ttyACM0", 115200)):
@@ -24,7 +25,9 @@ def capture_data(resolution, arduino = serial.Serial("/dev/ttyACM0", 115200)):
     totalPoints = (64/resolution)**2
 
     while len(coordinates < totalPoints):
-        data = arduino.readline().rstrip('\n')
+        #While we don't have all the data yet,
+        #read it from the serial and append to a list
+        data = arduino.readline().rstrip('\n') 
         coordinates.append(data)
     return coordinates
 
@@ -37,6 +40,22 @@ def processData(rawData):
     Outputs:
         processedData -> list of real world coordinates in units
     """
+    x = []
+    y =  []
+    z = []
+    #Assuming origin is at motor when at center of pan and tilt
+
+    callibration = 0 #Fill in with acutal callibration value
+    for coordinate in rawData:
+        distance = coordinate[2] * callibration
+        z.append(distance)
+
+        #deals with conversion between servo value and angle
+        angle_conversion = (np.py/4)/128
+        #converts to cartesian shifting origin to center servo value
+        horizontal_coordinate = distance*np.cos((64-x)*angle_conversion)
+        #converts to cartesian leaving origin at base for y
+        vertical_coordinate = distance*np.sin((y)*angle_conversion)
 
     
 
