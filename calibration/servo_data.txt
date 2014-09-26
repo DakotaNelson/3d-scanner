@@ -1,0 +1,2 @@
+Pan servo center = 43 (increases to right)
+Tilt servo level = 157 (increases down)
