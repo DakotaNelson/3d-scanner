@@ -5,42 +5,29 @@ Servo tilt_servo;
 
 const int PAN_PIN = 3;
 const int TILT_PIN = 10;
+const int DELAY = 1000;
 
-
-double distance = 0;    // first analog sensor
-int inByte = 0;         // incoming serial byte
-
-// Every time you send a character, the arduino prints a value from its analog pin
-
-void setup()
-{
-  // start serial port at 9600 bps and wait for port to open:
-  Serial.begin(9600);
+void setup() {
   pan_servo.attach(PAN_PIN);
   tilt_servo.attach(TILT_PIN);
-  
+}
+
+void loop() {
   pan(0);
   tilt(0);
+  delay(DELAY);
+  
+  pan(-30);
+  delay(DELAY);
+  pan(30);
+  delay(DELAY);
+  
+  tilt(-10);
+  delay(DELAY);
+  tilt(90);
+  delay(DELAY);
 }
 
-void loop()
-{
-  establishContact(); // wait until a keypress comes across the line
-  while (Serial.available() > 0) 
-  {
-    // empty the serial buffer
-    inByte = Serial.read();
-  }
-  distance = analogRead(0); // take a single reading
-  Serial.println(distance);
-  // and then loop to the top and wait for another keypress
-}
-
-void establishContact() {
-  while (Serial.available() <= 0) {
-    delay(500);
-  }
-}
 
 bool pan(int deg) {
   // deg as in degrees
