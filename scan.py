@@ -27,12 +27,15 @@ def capture_data(resolution, arduino = serial.Serial("/dev/ttyACM0", 115200)):
     while len(coordinates) < 10: #totalPoints):
         #read data from the serial 
         data = arduino.readline().rstrip('\n')
+        # print arduino.readline()
+        print data
         coordinates.append(data)
+        time.sleep(0.01)
     return coordinates
 
-def processData(raw_data):
+def plotData(raw_data):
     """
-    Does math to turn sensor and servo values into physical distances
+    breaks
 
     Inputs:
         rawData -> list of coordinate values, every three make one 
@@ -41,22 +44,29 @@ def processData(raw_data):
         processedData -> list of real world coordinates in units
     """
     #Assuming origin is at motor when at center of pan and tilt
+    x = []
+    y = []
+    z = []
 
     callibration = 0 #Fill in with acutal callibration value
     for index in range(len(raw_data)):
-        depth = raw_data[index] * callibration
+        # depth = raw_data[index] * callibration
 
-        #deals with conversion between servo value and angle
-        angle_conversion = (np.py/4)/128
+        # #deals with conversion between servo value and angle
+        # angle_conversion = (np.py/4)/128
 
-        #converts to cartesian shifting origin to center servo value
-        horizontal_coordinate = depth*np.cos((96-raw_data[1+index])*angle_conversion)
+        # #converts to cartesian shifting origin to center servo value
+        # horizontal_coordinate = depth*np.cos((96-raw_data[1+index])*angle_conversion)
 
-        #converts to cartesian leaving origin at base for y
-        vertical_coordinate = depth*np.sin(96 -(raw_data[2+index])*angle_conversion)
-        x.append(horizontal_coordinate)
-        y.append(vertical_coordinate)
-        z.append(depth)
+        # #converts to cartesian leaving origin at base for y
+        # vertical_coordinate = depth*np.sin(96 -(raw_data[2+index])*angle_conversion)
+        x.append(raw_data[index])
+        y.append([index+1])
+        z.append([index+2])
+
+    # fig = plt.figure()
+    # Axes3D.scatter(X,Y, Z)
+    # plt.show()
     return x,y,z
 
     
@@ -69,8 +79,6 @@ def processData(raw_data):
 if __name__ == '__main__':
     raw = capture_data(1)
     print raw 
-    x,y,z = processedData(raw)
+    x,y,z = plotData(raw)
     print x
-    # fig = plt.figure()
-    # Axes3D.scatter(X,Y, Z)
-    # plt.show()
+ 
