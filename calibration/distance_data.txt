@@ -1,0 +1,5 @@
+Distance(in),AnalogRead
+6,553
+12,387
+24,199
+36,132
