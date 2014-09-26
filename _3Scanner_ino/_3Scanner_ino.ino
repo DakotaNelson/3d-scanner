@@ -4,7 +4,7 @@ Servo pan_servo;
 Servo tilt_servo;
 
 const int SERIAL_RATE = 9600;
-const int STEP = 3; // move one degree between scans
+const int STEP = 1; // move one degree between scans
 
 const int PAN_PIN = 3;
 const int TILT_PIN = 10;
@@ -31,7 +31,7 @@ void scan(int resolution){
   while(column < 30) {
 
     //scan direction 1
-    for(float d1 = -10; d1 < 30; d1 += STEP){
+    for(float d1 = -10; d1 < 50; d1 += STEP){
       tilt(d1); //scans one direction horizontally
       val = getDistance();
       
@@ -47,7 +47,7 @@ void scan(int resolution){
     delay(50);
 
     //scans in the other direction
-    for(int d2 = 30; d2 > -10; d2 -= STEP){ 
+    for(int d2 = 50; d2 > -10; d2 -= STEP){ 
       tilt(d2);
       val = getDistance();
       
@@ -118,6 +118,13 @@ void establishContact() {
 double getDistance() {
   double distance;
   distance = analogRead(SENSOR);
+  delay(10);
+  distance += analogRead(SENSOR);
+  delay(10);
+  distance += analogRead(SENSOR);
+  delay(10);
+  
+  distance = distance / 3.0;
   
   // fit on the calibration data (calculated in Matlab)
   // y = p1*x^4 + p2*x^3 + p3*x^2 + p4*x + p5 
