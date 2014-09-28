@@ -14,6 +14,9 @@ function plotData(csv_file, max_depth)
     [x,y,z] = sph2cart(Pan,Tilt,Z);
    
     plot3(x,y,z, '.')
+    
+    tri = delaunay(Pan,Tilt);
+    trisurf(tri,Pan,Tilt,Z)
 
     xlabel('x coordinate (in)')
     ylabel('y coordinate (in)')
